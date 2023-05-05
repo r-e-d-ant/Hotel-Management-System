@@ -13,6 +13,8 @@ public class Client {
     private String entranceDate;
     private String exitDate;
     private String days;
+    
+    // constructors
 
     public Client() {
     }
@@ -26,6 +28,8 @@ public class Client {
         this.exitDate = exitDate;
         this.days = days;
     }
+    
+    // getters and setters
 
     public String getClientId() {
         return clientId;

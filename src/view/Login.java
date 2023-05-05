@@ -113,6 +113,8 @@ public class Login extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    
+    // save user level in local file for the logged in user
     private void saveUserLevel(String usrLevel) {
         File file = new File("usrlvl.txt");
         
@@ -127,6 +129,7 @@ public class Login extends javax.swing.JFrame {
             System.out.println("Something went wrong! " + e);
         }
     }
+    
     private void loginUserBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginUserBtnActionPerformed
         // TODO add your handling code here:
         
@@ -149,8 +152,12 @@ public class Login extends javax.swing.JFrame {
                     // compare retrieved db password with entered password
                     if (userPwdInDb.equals(enteredPassword)) {
                         JOptionPane.showMessageDialog(this, "Logged in successfully");
+                        
+                        // get user level to be saved in file locally
                         String usrlvl = "" + result.getInt(4);
                         saveUserLevel(usrlvl);
+                        
+                        // get user level in order to decide which page to show
                         if (usrlvl.equals("1")) {
                             Admin adminLink = new Admin();
                             adminLink.setVisible(true);

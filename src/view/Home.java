@@ -40,6 +40,7 @@ public class Home extends javax.swing.JFrame {
         Room theRoom = new Room();
         ResultSet result = roomDao.getAllRooms(theRoom);
         
+        // populate rooms in room number combo box by showing available and unavailable rooms
         try {
             javax.swing.DefaultComboBoxModel roomTypeElement = new javax.swing.DefaultComboBoxModel<>(new String[] {});
             
@@ -467,6 +468,7 @@ public class Home extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_displayClientsTableMouseClicked
 
+    // function to update room if it is taken
     public int updateRoom(String no, String status) {
         Room theRoom = new Room();
         RoomDao roomDao = new RoomDao();
@@ -513,6 +515,7 @@ public class Home extends javax.swing.JFrame {
             // Instantiate the User DAO object
             ClientDao clientDao = new ClientDao();
             int rows = clientDao.updateClient(theClient);
+            // update room status to taken
             int updatedRooms = updateRoom(SelectedRoom, "taken");
 
             if (rows >= 1 && updatedRooms >= 1) {

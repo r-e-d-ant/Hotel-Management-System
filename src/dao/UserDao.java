@@ -19,12 +19,14 @@ public class UserDao {
     public Integer RegisterUser(User userObj) {
         try {
             // register driver
-            // -
+            // - not necessary
             // create connection
             Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // prepared statement
             PreparedStatement pst =
                     conn.prepareStatement("INSERT INTO user (user_id, fullname, email, password) VALUES(?,?,?,?)");
+            
+            // setup parameters
             pst.setString(1, userObj.getUserId());
             pst.setString(2, userObj.getFullName());
             pst.setString(3, userObj.getUserEmail());
@@ -44,12 +46,14 @@ public class UserDao {
     public Integer updateUser(User userObj) {
         try {
             // register driver
-            // -
+            // - not necessary
             // create connection
             Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // prepared statement
             PreparedStatement pst =
                     conn.prepareStatement("UPDATE user SET fullname=?, email=?, password=? WHERE user_id=?");
+            
+            // setup parameters
             pst.setString(1, userObj.getFullName());
             pst.setString(2, userObj.getUserEmail());
             pst.setString(3, userObj.getUserPassword());

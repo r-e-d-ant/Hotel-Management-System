@@ -158,7 +158,7 @@ public class RoomDao {
             // execute query
             ResultSet result = pst.executeQuery();
             return result;
-//            conn.close();
+            // conn.close(); -- the connection close itself when using prepared statement
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;

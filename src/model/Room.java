@@ -15,6 +15,8 @@ public class Room {
     private String roomStatus;
     private String fee;
     
+    // constructors
+    
     public Room() {}
 
     public Room(String roomNo, String roomStatus, String fee) {
@@ -23,7 +25,7 @@ public class Room {
         this.fee = fee;
     }
     
-
+    // getters and setters
     public String getRoomNo() {
         return roomNo;
     }

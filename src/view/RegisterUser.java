@@ -155,6 +155,7 @@ public class RegisterUser extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    // saving the user button action
     private void saveUserBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveUserBtnActionPerformed
         // TODO add your handling code here:
         
@@ -168,6 +169,7 @@ public class RegisterUser extends javax.swing.JFrame {
                 // Instantiate the User model object
                 User theUser = new User();
 
+                // setting the parameters
                 theUser.setUserId(userIdBox.getText());
                 theUser.setFullName(fullNameBox.getText());
                 theUser.setUserEmail(emailBox.getText());
@@ -175,10 +177,13 @@ public class RegisterUser extends javax.swing.JFrame {
 
                 // Instantiate the User DAO object
                 UserDao userDao = new UserDao();
+                
+                // invoke register user function from DAO
                 int rows = userDao.RegisterUser(theUser);
 
                 if (rows >= 1) {
                     JOptionPane.showMessageDialog(this, "User created");
+                    // navigate to login form and close current window
                     Login loginForm = new Login();
                     loginForm.setVisible(true);
                     this.dispose();
@@ -191,6 +196,8 @@ public class RegisterUser extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_saveUserBtnActionPerformed
 
+    // this function is for getting the user level
+    // as admin or regular user don't perform same functions
     private String getUserLevel() {
         File file = new File("usrlvl.txt");
         
@@ -205,6 +212,8 @@ public class RegisterUser extends javax.swing.JFrame {
         }
     }
     
+    // check user level for getting a type of user
+    // 1 is admin; 0 is regular user;
     private void gotoMenuLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gotoMenuLinkMouseClicked
         // TODO add your handling code here:
         if ((getUserLevel()).equals("1")) {

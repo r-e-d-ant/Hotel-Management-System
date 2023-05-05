@@ -11,17 +11,20 @@ public class User {
     private String fullName;
     private String userEmail;
     private String userPassword;
-
+    
+    // constructors
+    
     public User() {
     }
-
+    
     public User(String userId, String fullName, String userEmail, String userPassword) {
         this.userId = userId;
         this.fullName = fullName;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
     }
-
+    
+    // getters and setters
     public String getUserId() {
         return userId;
     }

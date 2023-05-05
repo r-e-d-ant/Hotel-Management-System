@@ -54,7 +54,7 @@ public class ClientDao {
 "JOIN room ON ROOM.room_no = Client.client_room_no ORDER BY entrance_date ASC");
             // execute query
             ResultSet result = pst.executeQuery();
-//            conn.close();
+            // conn.close(); -- the connection close itself when using prepared statement
             return result;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -74,7 +74,7 @@ public class ClientDao {
             "SELECT client_id, first_name, last_name, client_room_no, entrance_date, exit_date, fee, (exit_date - entrance_date) as Days FROM client JOIN room ON ROOM.room_no = Client.client_room_no WHERE client_id LIKE '%"+searchKey+"%' OR first_name LIKE '%"+searchKey+"%' OR last_name LIKE '%"+searchKey+"%' OR client_room_no LIKE '%"+searchKey+"%' ORDER BY entrance_date ASC");
             // execute query
             ResultSet result = pst.executeQuery();
-//            conn.close();
+            // conn.close(); -- the connection close itself when using prepared statement
             return result;
         } catch (Exception ex) {
             ex.printStackTrace();

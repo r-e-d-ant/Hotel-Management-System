@@ -186,6 +186,8 @@ public class RegisterRoom extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_createRoomBtnActionPerformed
 
+    // this function is for getting the user level
+    // as admin or regular user don't perform same functions
     private String getUserLevel() {
         File file = new File("usrlvl.txt");
         

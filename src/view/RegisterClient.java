@@ -40,6 +40,7 @@ public class RegisterClient extends javax.swing.JFrame {
         Room theRoom = new Room();
         ResultSet result = roomDao.getAllRooms(theRoom);
         
+        // populate rooms in room number combo box by showing available and unavailable rooms
         try {
             javax.swing.DefaultComboBoxModel roomTypeElement = new javax.swing.DefaultComboBoxModel<>(new String[] {});
             
@@ -360,6 +361,8 @@ public class RegisterClient extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_openLogoutWindowLinkMouseClicked
 
+    // this function is for getting the user level
+    // as admin or regular user don't perform same functions
     private String getUserLevel() {
         File file = new File("usrlvl.txt");
         
