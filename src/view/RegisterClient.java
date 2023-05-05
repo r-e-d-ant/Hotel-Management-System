@@ -44,7 +44,7 @@ public class RegisterClient extends javax.swing.JFrame {
             javax.swing.DefaultComboBoxModel roomTypeElement = new javax.swing.DefaultComboBoxModel<>(new String[] {});
             
             while(result.next()) {
-                roomTypeElement.addElement(result.getString("room_no"));
+                roomTypeElement.addElement(result.getString("room_no") +"-"+result.getString("status"));
             }
             roomTypeSelector.setModel(roomTypeElement);
         } catch (SQLException ex) {
@@ -133,11 +133,6 @@ public class RegisterClient extends javax.swing.JFrame {
         jLabel6.setText("Exit date");
 
         entranceDateBox.setDateFormatString("dd MM yyyy");
-        entranceDateBox.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                entranceDateBoxPropertyChange(evt);
-            }
-        });
 
         exitDateBox.setDateFormatString("dd MM yyyy");
 
@@ -275,9 +270,20 @@ public class RegisterClient extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    public int updateRoom(String no, String status) {
+        Room theRoom = new Room();
+        RoomDao roomDao = new RoomDao();
+        
+        theRoom.setRoomNo(no);
+        theRoom.setRoomStatus(status);
+        
+        int rowsAffected = roomDao.updateRoomStatus(theRoom);
+        
+        return rowsAffected;
+    }
+    
     private void registerClientBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerClientBtnActionPerformed
         // TODO add your handling code here:
-        
         if (fnameBox.getText().isEmpty() || lnameBox.getText().isEmpty()
                 || clientIdBox.getText().isEmpty() || entranceDateBox.getDate() == null
                 || exitDateBox.getDate() == null ) {
@@ -294,7 +300,9 @@ public class RegisterClient extends javax.swing.JFrame {
 
                 // get room number of selected room type
                 String SelectedRoom = roomTypeSelector.getSelectedItem().toString();
-                theClient.setRoomNo(SelectedRoom);
+                String selected = SelectedRoom.substring(0, SelectedRoom.indexOf("-"));
+                
+                theClient.setRoomNo(selected);
 
                 // --------------
 
@@ -307,14 +315,18 @@ public class RegisterClient extends javax.swing.JFrame {
                 // Instantiate the User DAO object
                 ClientDao clientDao = new ClientDao();
                 int rows = clientDao.registerClient(theClient);
+                
+                // update room from available to taken
+                int updatedRooms = updateRoom(selected, "taken");
 
-                if (rows >= 1) {
+                if (rows >= 1 && updatedRooms >= 1) {
+                    // Update the room table to mark a room as unavailable
                     JOptionPane.showMessageDialog(this, "Client registered");
                     Home homeForm = new Home();
                     homeForm.setVisible(true);
                     this.dispose();
                 } else {
-                    JOptionPane.showMessageDialog(this, "Client not registered, Client problem");
+                    JOptionPane.showMessageDialog(this, "Client not registered");
                 }
             }
         }
@@ -387,20 +399,6 @@ public class RegisterClient extends javax.swing.JFrame {
             this.dispose();
         }
     }//GEN-LAST:event_gotoMenuLinkMouseClicked
-
-    private void entranceDateBoxPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_entranceDateBoxPropertyChange
-        // TODO add your handling code here:
-//        System.out.println(entranceDateBox.getDate());
-//        if (entranceDateBox.getDate() == null) {
-//            entranceDateBox.setDate(today);
-//        } else {
-//            if (entranceDateBox.getDate().compareTo(today) < 0) {
-//                entranceDateBox.setDate(today);
-//            } else {
-//                JOptionPane.showMessageDialog(this, "Sorry, you can not select passed date");
-//            }
-//        }
-    }//GEN-LAST:event_entranceDateBoxPropertyChange
 
     /**
      * @param args the command line arguments

@@ -467,6 +467,19 @@ public class Home extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_displayClientsTableMouseClicked
 
+    public int updateRoom(String no, String status) {
+        Room theRoom = new Room();
+        RoomDao roomDao = new RoomDao();
+        
+        theRoom.setRoomNo(no);
+        theRoom.setRoomStatus(status);
+        
+        int rowsAffected = roomDao.updateRoomStatus(theRoom);
+        
+        return rowsAffected;
+    }
+    
+    
     private void updateClientBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateClientBtnActionPerformed
         // TODO add your handling code here:
         // Instantiate the User model object
@@ -500,8 +513,9 @@ public class Home extends javax.swing.JFrame {
             // Instantiate the User DAO object
             ClientDao clientDao = new ClientDao();
             int rows = clientDao.updateClient(theClient);
+            int updatedRooms = updateRoom(SelectedRoom, "taken");
 
-            if (rows >= 1) {
+            if (rows >= 1 && updatedRooms >= 1) {
                 JOptionPane.showMessageDialog(this, "Client updated");
                 retrieveDataFromDbToTable();
             } else {
