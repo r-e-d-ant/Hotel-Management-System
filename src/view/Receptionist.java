@@ -43,7 +43,7 @@ public class Receptionist extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, 18)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 102, 102));
-        jLabel2.setText("Admin Menu");
+        jLabel2.setText("Receptionist Menu");
 
         createRoomFormLinkBtn.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         createRoomFormLinkBtn.setForeground(new java.awt.Color(0, 102, 102));
@@ -100,14 +100,14 @@ public class Receptionist extends javax.swing.JFrame {
                                 .addGap(137, 137, 137)
                                 .addComponent(jLabel1))
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(261, 261, 261)
-                                .addComponent(jLabel2))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGap(30, 30, 30)
                                 .addComponent(createRoomFormLinkBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 603, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(251, 251, 251)
-                        .addComponent(jLabel3)))
+                        .addComponent(jLabel3))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(243, 243, 243)
+                        .addComponent(jLabel2)))
                 .addContainerGap(36, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
