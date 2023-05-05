@@ -275,9 +275,6 @@ public class RegisterClient extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Can't register fill all the fields");
         } else {
             Client theClient = new Client();
-            Room theRoom = new Room();
-            RoomDao roomDao = new RoomDao();
-
             // set the rooms in model
             theClient.setClientId(clientIdBox.getText());
             theClient.setFirstName(fnameBox.getText());
@@ -299,21 +296,12 @@ public class RegisterClient extends javax.swing.JFrame {
             // Instantiate the User DAO object
             ClientDao clientDao = new ClientDao();
             int rows = clientDao.registerClient(theClient);
-
+            
             if (rows >= 1) {
-                theRoom.setRoomNo(selected);
-                theRoom.setRoomStatus("taken");
-                
-                int rowsRoom = roomDao.updateRoomStatus(theRoom);
-                
-                if (rowsRoom >= 1) {
-                    JOptionPane.showMessageDialog(this, "Client registered");
-                    Home homeForm = new Home();
-                    homeForm.setVisible(true);
-                    this.dispose();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Client not registered, room problem");
-                }
+                JOptionPane.showMessageDialog(this, "Client registered");
+                Home homeForm = new Home();
+                homeForm.setVisible(true);
+                this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Client not registered, Client problem");
             }

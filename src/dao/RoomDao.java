@@ -109,9 +109,14 @@ public class RoomDao {
             Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // prepared statement
             PreparedStatement pst =
-                    conn.prepareStatement("UPDATE room SET status=? WHERE room_no=?");
+                    conn.prepareStatement("UPDATE room SET status=?, fee=? WHERE room_no=?");
+            System.out.println(roomObj.getRoomStatus());
+            System.out.println(roomObj.getRoomNo());
+            System.out.println(roomObj.getFee());
+            
             pst.setString(1, roomObj.getRoomStatus());
-            pst.setString(2, roomObj.getRoomNo());
+            pst.setString(2, roomObj.getFee());
+            pst.setString(3, roomObj.getRoomNo());
             // execute query
             int rowsAffected = pst.executeUpdate();
             // close connection
