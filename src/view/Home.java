@@ -50,6 +50,7 @@ public class Home extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(RegisterClient.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
     
     private void addColumnsOnTable() {
@@ -85,11 +86,7 @@ public class Home extends javax.swing.JFrame {
             ResultSet result = clientDao.displayClients();
             
             // clear the rows first
-            int i = tableModel.getRowCount();
-            while (i != 0) {
-                i--;
-                tableModel.removeRow(i);
-            }
+            tableModel.setRowCount(0);
             
             while (result.next()) {
                 tableModel.addRow(new Object[] {
@@ -560,11 +557,7 @@ public class Home extends javax.swing.JFrame {
             ResultSet result = clientDao.searchClient(searchInputBox.getText());
             
             // clear the rows
-            int i = tableModel.getRowCount();
-            while (i != 0) {
-                i--;
-                tableModel.removeRow(i);
-            }
+            tableModel.setRowCount(0);
             
             while (result.next()) {
                 tableModel.addRow(new Object[] {
@@ -594,11 +587,7 @@ public class Home extends javax.swing.JFrame {
                 ResultSet result = clientDao.searchClient(searchInputBox.getText());
                 
                 // clear the rows
-                int i = tableModel.getRowCount();
-                while (i != 0) {
-                    i--;
-                    tableModel.removeRow(i);
-                }
+                tableModel.setRowCount(0);
                 
                 while (result.next()) {
                     tableModel.addRow(new Object[] {
@@ -660,12 +649,12 @@ public class Home extends javax.swing.JFrame {
             String fname = tableModel.getValueAt(hr, 1).toString();
             String lname = tableModel.getValueAt(hr, 2).toString();
             String roomNr = tableModel.getValueAt(hr, 3).toString();
-            String fee = tableModel.getValueAt(hr, 5).toString();
-            String days = tableModel.getValueAt(hr, 8).toString();
+            String fee = tableModel.getValueAt(hr, 4).toString();
+            String days = tableModel.getValueAt(hr, 7).toString();
             
             try {
-                entranceDate = df.parse(tableModel.getValueAt(hr, 6).toString());
-                exitDate = df.parse(tableModel.getValueAt(hr, 7).toString());
+                entranceDate = df.parse(tableModel.getValueAt(hr, 5).toString());
+                exitDate = df.parse(tableModel.getValueAt(hr, 6).toString());
                 
                 String bill = "================================= HAPPY STAY HOTEL =================================\n\n" +
                         fname +" "+ lname + "\n\n" +"Room Nr: "+ roomNr + "\n\n" +

@@ -24,7 +24,7 @@ public class ClientDao {
             Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // Prepared statement
             PreparedStatement pst =
-                    conn.prepareStatement("INSERT INTO client VALUES(?,?,?,?,?,?)");
+                    conn.prepareStatement("INSERT INTO client (client_id, first_name, last_name, client_room_no, entrance_date, exit_date) VALUES(?,?,?,?,?,?)");
             pst.setString(1, clientObj.getClientId());
             pst.setString(2, clientObj.getFirstName());
             pst.setString(3, clientObj.getLastName());

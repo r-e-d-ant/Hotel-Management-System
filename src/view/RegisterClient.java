@@ -14,7 +14,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -26,6 +28,8 @@ import model.Room;
  * @author hg_ofthecity
  */
 public class RegisterClient extends javax.swing.JFrame {
+    SimpleDateFormat df = new SimpleDateFormat("dd MM yyyy");
+    Date today = new Date();
 
     /**
      * Creates new form RegisterClient
@@ -40,12 +44,14 @@ public class RegisterClient extends javax.swing.JFrame {
             javax.swing.DefaultComboBoxModel roomTypeElement = new javax.swing.DefaultComboBoxModel<>(new String[] {});
             
             while(result.next()) {
-                roomTypeElement.addElement(result.getString("room_no") +" - "+ result.getString("status"));
+                roomTypeElement.addElement(result.getString("room_no"));
             }
             roomTypeSelector.setModel(roomTypeElement);
         } catch (SQLException ex) {
             Logger.getLogger(RegisterClient.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        entranceDateBox.setDate(today);
     }
 
     /**
@@ -127,6 +133,11 @@ public class RegisterClient extends javax.swing.JFrame {
         jLabel6.setText("Exit date");
 
         entranceDateBox.setDateFormatString("dd MM yyyy");
+        entranceDateBox.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                entranceDateBoxPropertyChange(evt);
+            }
+        });
 
         exitDateBox.setDateFormatString("dd MM yyyy");
 
@@ -267,43 +278,44 @@ public class RegisterClient extends javax.swing.JFrame {
     private void registerClientBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registerClientBtnActionPerformed
         // TODO add your handling code here:
         
-        SimpleDateFormat df = new SimpleDateFormat("dd MM yyyy");
-        
         if (fnameBox.getText().isEmpty() || lnameBox.getText().isEmpty()
                 || clientIdBox.getText().isEmpty() || entranceDateBox.getDate() == null
                 || exitDateBox.getDate() == null ) {
             JOptionPane.showMessageDialog(this, "Can't register fill all the fields");
         } else {
-            Client theClient = new Client();
-            // set the rooms in model
-            theClient.setClientId(clientIdBox.getText());
-            theClient.setFirstName(fnameBox.getText());
-            theClient.setLastName(lnameBox.getText());
-            
-            // get room number of selected room type
-            String SelectedRoom = roomTypeSelector.getSelectedItem().toString();
-            String selected = SelectedRoom.substring(0, SelectedRoom.indexOf("-"));
-            theClient.setRoomNo(selected);
-            
-            // --------------
-
-            String entranceDate = df.format(entranceDateBox.getDate());
-            theClient.setEntranceDate(entranceDate);
-
-            String exitDate = df.format(exitDateBox.getDate());
-            theClient.setExitDate(exitDate);
-
-            // Instantiate the User DAO object
-            ClientDao clientDao = new ClientDao();
-            int rows = clientDao.registerClient(theClient);
-            
-            if (rows >= 1) {
-                JOptionPane.showMessageDialog(this, "Client registered");
-                Home homeForm = new Home();
-                homeForm.setVisible(true);
-                this.dispose();
+            if (entranceDateBox.getDate().compareTo(today) < 0) {
+                JOptionPane.showMessageDialog(this, "Sorry, can not select passed date");
             } else {
-                JOptionPane.showMessageDialog(this, "Client not registered, Client problem");
+                Client theClient = new Client();
+                // set the rooms in model
+                theClient.setClientId(clientIdBox.getText());
+                theClient.setFirstName(fnameBox.getText());
+                theClient.setLastName(lnameBox.getText());
+
+                // get room number of selected room type
+                String SelectedRoom = roomTypeSelector.getSelectedItem().toString();
+                theClient.setRoomNo(SelectedRoom);
+
+                // --------------
+
+                String entranceDate = df.format(entranceDateBox.getDate());
+                theClient.setEntranceDate(entranceDate);
+
+                String exitDate = df.format(exitDateBox.getDate());
+                theClient.setExitDate(exitDate);
+
+                // Instantiate the User DAO object
+                ClientDao clientDao = new ClientDao();
+                int rows = clientDao.registerClient(theClient);
+
+                if (rows >= 1) {
+                    JOptionPane.showMessageDialog(this, "Client registered");
+                    Home homeForm = new Home();
+                    homeForm.setVisible(true);
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Client not registered, Client problem");
+                }
             }
         }
     }//GEN-LAST:event_registerClientBtnActionPerformed
@@ -375,6 +387,20 @@ public class RegisterClient extends javax.swing.JFrame {
             this.dispose();
         }
     }//GEN-LAST:event_gotoMenuLinkMouseClicked
+
+    private void entranceDateBoxPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_entranceDateBoxPropertyChange
+        // TODO add your handling code here:
+//        System.out.println(entranceDateBox.getDate());
+//        if (entranceDateBox.getDate() == null) {
+//            entranceDateBox.setDate(today);
+//        } else {
+//            if (entranceDateBox.getDate().compareTo(today) < 0) {
+//                entranceDateBox.setDate(today);
+//            } else {
+//                JOptionPane.showMessageDialog(this, "Sorry, you can not select passed date");
+//            }
+//        }
+    }//GEN-LAST:event_entranceDateBoxPropertyChange
 
     /**
      * @param args the command line arguments

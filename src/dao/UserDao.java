@@ -24,7 +24,7 @@ public class UserDao {
             Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // prepared statement
             PreparedStatement pst =
-                    conn.prepareStatement("INSERT INTO user VALUES(?,?,?,?)");
+                    conn.prepareStatement("INSERT INTO user (user_id, fullname, email, password) VALUES(?,?,?,?)");
             pst.setString(1, userObj.getUserId());
             pst.setString(2, userObj.getFullName());
             pst.setString(3, userObj.getUserEmail());

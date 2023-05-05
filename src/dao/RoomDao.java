@@ -47,7 +47,7 @@ public class RoomDao {
             Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // Prepared statement
             PreparedStatement pst =
-                    conn.prepareStatement("SELECT room_no, fee, status FROM room");
+                    conn.prepareStatement("SELECT room_no, fee, status FROM room ORDER BY room_no ASC");
             // execute query
             ResultSet result = pst.executeQuery();
             return result;
@@ -67,7 +67,7 @@ public class RoomDao {
             // Prepared statement
             PreparedStatement pst =
                     conn.prepareStatement(
-            "SELECT room_no, fee. status FROM room WHERE room_no LIKE '%"+searchKey+"%' OR room_type LIKE '%"+searchKey+"%' OR fee LIKE '%"+searchKey+"%' ORDER BY fee ASC");
+            "SELECT room_no, fee, status FROM room WHERE room_no LIKE '%"+searchKey+"%' ORDER BY room_no ASC");
             // execute query
             ResultSet result = pst.executeQuery();
             return result;

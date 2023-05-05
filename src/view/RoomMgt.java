@@ -46,11 +46,7 @@ public class RoomMgt extends javax.swing.JFrame {
             ResultSet result = roomDao.displayRooms(theRoom);
             
             // clear rows
-            int i = tableModel.getRowCount();
-            while (i != 0) {
-                i--;
-                tableModel.removeRow(i);
-            }
+            tableModel.setRowCount(0);
             
             while (result.next()) {
                 tableModel.addRow(new Object[] {
@@ -428,11 +424,8 @@ public class RoomMgt extends javax.swing.JFrame {
                 ResultSet result = roomDao.searchRoom(theRoom, searchInputBox.getText());
                 
                 // clear rows
-                int i = tableModel.getRowCount();
-                while (i != 0) {
-                    i--;
-                    tableModel.removeRow(i);
-                }
+                tableModel.setRowCount(0);
+                
                 while (result.next()) {
                     tableModel.addRow(new Object[] {
                         result.getString(1),
@@ -455,11 +448,7 @@ public class RoomMgt extends javax.swing.JFrame {
             ResultSet result = roomDao.searchRoom(theRoom, searchInputBox.getText());
             
             // clear rows
-            int i = tableModel.getRowCount();
-            while (i != 0) {
-                i--;
-                tableModel.removeRow(i);
-            }
+            tableModel.setRowCount(0);
             
             while (result.next()) {
                 tableModel.addRow(new Object[] {
