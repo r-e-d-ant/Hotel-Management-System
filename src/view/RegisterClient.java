@@ -40,7 +40,7 @@ public class RegisterClient extends javax.swing.JFrame {
             javax.swing.DefaultComboBoxModel roomTypeElement = new javax.swing.DefaultComboBoxModel<>(new String[] {});
             
             while(result.next()) {
-                roomTypeElement.addElement(result.getString(2));
+                roomTypeElement.addElement(result.getString("room_no") +" - "+ result.getString("status"));
             }
             roomTypeSelector.setModel(roomTypeElement);
         } catch (SQLException ex) {
@@ -270,14 +270,13 @@ public class RegisterClient extends javax.swing.JFrame {
         SimpleDateFormat df = new SimpleDateFormat("dd MM yyyy");
         
         if (fnameBox.getText().isEmpty() || lnameBox.getText().isEmpty()
-                || clientIdBox.getText().isEmpty()
-                || (int) roomTypeSelector.getSelectedIndex() == 0
-                || entranceDateBox.getDate() == null
+                || clientIdBox.getText().isEmpty() || entranceDateBox.getDate() == null
                 || exitDateBox.getDate() == null ) {
             JOptionPane.showMessageDialog(this, "Can't register fill all the fields");
         } else {
-            // Instantiate the User model object
             Client theClient = new Client();
+            Room theRoom = new Room();
+            RoomDao roomDao = new RoomDao();
 
             // set the rooms in model
             theClient.setClientId(clientIdBox.getText());
@@ -285,21 +284,10 @@ public class RegisterClient extends javax.swing.JFrame {
             theClient.setLastName(lnameBox.getText());
             
             // get room number of selected room type
-            RoomDao roomDao = new RoomDao();
-            Room theRoom = new Room();
-            ResultSet result = roomDao.getAllRooms(theRoom);
+            String SelectedRoom = roomTypeSelector.getSelectedItem().toString();
+            String selected = SelectedRoom.substring(0, SelectedRoom.indexOf("-"));
+            theClient.setRoomNo(selected);
             
-            try {
-                String room_no;
-                while (result.next()) {
-                    if ((result.getString(2)).equals(roomTypeSelector.getSelectedItem())) {
-                        room_no = result.getString(1);
-                        theClient.setRoomNo(room_no);
-                    }
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(RegisterClient.class.getName()).log(Level.SEVERE, null, ex);
-            }
             // --------------
 
             String entranceDate = df.format(entranceDateBox.getDate());
@@ -313,12 +301,21 @@ public class RegisterClient extends javax.swing.JFrame {
             int rows = clientDao.registerClient(theClient);
 
             if (rows >= 1) {
-                JOptionPane.showMessageDialog(this, "Client registered");
-                Home homeForm = new Home();
-                homeForm.setVisible(true);
-                this.dispose();
+                theRoom.setRoomNo(selected);
+                theRoom.setRoomStatus("taken");
+                
+                int rowsRoom = roomDao.updateRoomStatus(theRoom);
+                
+                if (rowsRoom >= 1) {
+                    JOptionPane.showMessageDialog(this, "Client registered");
+                    Home homeForm = new Home();
+                    homeForm.setVisible(true);
+                    this.dispose();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Client not registered, room problem");
+                }
             } else {
-                JOptionPane.showMessageDialog(this, "Client not registered");
+                JOptionPane.showMessageDialog(this, "Client not registered, Client problem");
             }
         }
     }//GEN-LAST:event_registerClientBtnActionPerformed

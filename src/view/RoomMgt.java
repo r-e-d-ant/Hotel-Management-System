@@ -34,8 +34,8 @@ public class RoomMgt extends javax.swing.JFrame {
     
     private void addColumnsOnTable() {
         tableModel.addColumn("Room Nr");
-        tableModel.addColumn("Room type");
         tableModel.addColumn("Fee");
+        tableModel.addColumn("Status");
         displayRoomsTable.setModel(tableModel);
     }
     
@@ -84,11 +84,11 @@ public class RoomMgt extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         roomNoBox = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        roomTypeBox = new javax.swing.JTextField();
         newRoomLinkBtn = new javax.swing.JButton();
         updateBtn = new javax.swing.JButton();
         deleteBtn = new javax.swing.JButton();
         gotoMenuLink = new javax.swing.JLabel();
+        roomStatus = new javax.swing.JComboBox<>();
         jMenuBar1 = new javax.swing.JMenuBar();
         openClientMgtWindowLink = new javax.swing.JMenu();
         openAddClientWindowLink = new javax.swing.JMenu();
@@ -148,7 +148,7 @@ public class RoomMgt extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 102, 102));
-        jLabel3.setText("Room type");
+        jLabel3.setText("Status");
 
         newRoomLinkBtn.setForeground(new java.awt.Color(0, 102, 102));
         newRoomLinkBtn.setText("New room");
@@ -183,6 +183,8 @@ public class RoomMgt extends javax.swing.JFrame {
             }
         });
 
+        roomStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "available", "taken" }));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -194,8 +196,8 @@ public class RoomMgt extends javax.swing.JFrame {
                     .addComponent(roomNoBox, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(22, 22, 22)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(roomTypeBox, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
+                    .addComponent(jLabel3)
+                    .addComponent(roomStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 276, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
@@ -245,9 +247,11 @@ public class RoomMgt extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(roomTypeBox, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(roomNoBox, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(roomNoBox, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(7, 7, 7)
+                                .addComponent(roomStatus))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -326,17 +330,15 @@ public class RoomMgt extends javax.swing.JFrame {
         // TODO add your handling code here:
         // Instantiate the Room model object
         
-        if (roomTypeBox.getText().isEmpty() ||
-                roomFeeBox.getText().isEmpty() ||
-                roomNoBox.getText().isEmpty()) {
+        if (roomFeeBox.getText().isEmpty() || roomNoBox.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "First select a room to update");
         } else {
             if (roomNoBox.getText().length() == 5) { // #2 validation
-                if (Integer.parseInt(roomFeeBox.getText()) > 10000) { // #3 validation
+                if (Float.parseFloat(roomFeeBox.getText()) > 10000) { // #3 validation
                     Room theRoom = new Room();
         
                     // set the rooms in model
-                    theRoom.setRoomType(roomTypeBox.getText());
+                    theRoom.setRoomStatus(roomStatus.getSelectedItem().toString());
                     theRoom.setFee(roomFeeBox.getText());
                     theRoom.setRoomNo(roomNoBox.getText());
 
@@ -351,7 +353,7 @@ public class RoomMgt extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(this, "Room not updated");
                     }
                 } else {
-                    JOptionPane.showMessageDialog(this, "Can't create room with fee less than 10 000");
+                    JOptionPane.showMessageDialog(this, "Can't update room with fee less than 10 000");
                 }
             } else {
                 JOptionPane.showMessageDialog(this, "Room number can't be less or greater than 5 characters");
@@ -362,9 +364,7 @@ public class RoomMgt extends javax.swing.JFrame {
     private void deleteBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteBtnActionPerformed
         // TODO add your handling code here:
         
-        if (roomTypeBox.getText().isEmpty() ||
-                roomFeeBox.getText().isEmpty() ||
-                roomNoBox.getText().isEmpty()) {
+        if (roomFeeBox.getText().isEmpty() || roomNoBox.getText().isEmpty()) {
             JOptionPane.showMessageDialog(this, "First select a room to delete");
         } else {
             // Instantiate the Room model object
@@ -391,8 +391,8 @@ public class RoomMgt extends javax.swing.JFrame {
         tableModel = (DefaultTableModel) displayRoomsTable.getModel();
         int hr = displayRoomsTable.getSelectedRow();
         roomNoBox.setText(tableModel.getValueAt(hr, 0).toString());
-        roomTypeBox.setText(tableModel.getValueAt(hr, 1).toString());
-        roomFeeBox.setText(tableModel.getValueAt(hr, 2).toString());
+        roomStatus.setSelectedItem(tableModel.getValueAt(hr, 2).toString());
+        roomFeeBox.setText(tableModel.getValueAt(hr, 1).toString());
     }//GEN-LAST:event_displayRoomsTableMouseClicked
 
     private void openClientMgtWindowLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_openClientMgtWindowLinkMouseClicked
@@ -566,7 +566,7 @@ public class RoomMgt extends javax.swing.JFrame {
     private javax.swing.JMenu openLogoutWindowLink;
     private javax.swing.JTextField roomFeeBox;
     private javax.swing.JTextField roomNoBox;
-    private javax.swing.JTextField roomTypeBox;
+    private javax.swing.JComboBox<String> roomStatus;
     private javax.swing.JButton searchBtn;
     private javax.swing.JTextField searchInputBox;
     private javax.swing.JButton updateBtn;

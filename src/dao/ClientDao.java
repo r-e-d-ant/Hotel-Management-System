@@ -50,7 +50,7 @@ public class ClientDao {
             Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // Prepared statement
             PreparedStatement pst =
-                    conn.prepareStatement("SELECT client_id, first_name, last_name, client_room_no, room_type, entrance_date, exit_date, fee, (exit_date - entrance_date) as Days FROM client\n" +
+                    conn.prepareStatement("SELECT client_id, first_name, last_name, client_room_no, entrance_date, exit_date, fee, (exit_date - entrance_date) as Days FROM client\n" +
 "JOIN room ON ROOM.room_no = Client.client_room_no ORDER BY entrance_date ASC");
             // execute query
             ResultSet result = pst.executeQuery();
@@ -71,7 +71,7 @@ public class ClientDao {
             // Prepared statement
             PreparedStatement pst =
                     conn.prepareStatement(
-            "SELECT client_id, first_name, last_name, client_room_no, room_type, entrance_date, exit_date, fee, (exit_date - entrance_date) as Days FROM client JOIN room ON ROOM.room_no = Client.client_room_no WHERE client_id LIKE '%"+searchKey+"%' OR first_name LIKE '%"+searchKey+"%' OR last_name LIKE '%"+searchKey+"%' OR client_room_no LIKE '%"+searchKey+"%' ORDER BY entrance_date ASC");
+            "SELECT client_id, first_name, last_name, client_room_no, entrance_date, exit_date, fee, (exit_date - entrance_date) as Days FROM client JOIN room ON ROOM.room_no = Client.client_room_no WHERE client_id LIKE '%"+searchKey+"%' OR first_name LIKE '%"+searchKey+"%' OR last_name LIKE '%"+searchKey+"%' OR client_room_no LIKE '%"+searchKey+"%' ORDER BY entrance_date ASC");
             // execute query
             ResultSet result = pst.executeQuery();
 //            conn.close();

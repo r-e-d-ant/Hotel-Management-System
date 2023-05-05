@@ -37,7 +37,6 @@ public class RegisterRoom extends javax.swing.JFrame {
 
         jSeparator2 = new javax.swing.JSeparator();
         jLabel1 = new javax.swing.JLabel();
-        roomTypeBox = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         createRoomBtn = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
@@ -45,6 +44,7 @@ public class RegisterRoom extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         roomFeeBox = new javax.swing.JTextField();
         gotoMenuLink = new javax.swing.JLabel();
+        roomStatus = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -56,7 +56,7 @@ public class RegisterRoom extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 102, 102));
-        jLabel3.setText("Room type");
+        jLabel3.setText("Room status");
 
         createRoomBtn.setBackground(new java.awt.Color(255, 255, 255));
         createRoomBtn.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
@@ -85,6 +85,8 @@ public class RegisterRoom extends javax.swing.JFrame {
             }
         });
 
+        roomStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "available", "taken" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -98,13 +100,13 @@ public class RegisterRoom extends javax.swing.JFrame {
                         .addGap(32, 32, 32)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jLabel4)
                                     .addComponent(jLabel3)
-                                    .addComponent(roomNoBox, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(roomNoBox, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
                                     .addComponent(jLabel5)
-                                    .addComponent(roomTypeBox, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(roomFeeBox, javax.swing.GroupLayout.PREFERRED_SIZE, 371, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(roomFeeBox, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
+                                    .addComponent(roomStatus, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(0, 30, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(createRoomBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -131,7 +133,7 @@ public class RegisterRoom extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
-                .addComponent(roomTypeBox, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(roomStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel4)
                 .addGap(18, 18, 18)
@@ -150,19 +152,17 @@ public class RegisterRoom extends javax.swing.JFrame {
     private void createRoomBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createRoomBtnActionPerformed
         // TODO add your handling code here:
         
-        if (roomNoBox.getText().isEmpty()
-                || roomTypeBox.getText().isEmpty()
-                || roomFeeBox.getText().isEmpty()) { // #1 validation
+        if (roomNoBox.getText().isEmpty() || roomFeeBox.getText().isEmpty()) { // #1 validation
             JOptionPane.showMessageDialog(this, "Room not created, fill all the fields.");
         } else {
             if (roomNoBox.getText().length() == 5) { // #2 validation
-                if (Integer.parseInt(roomFeeBox.getText()) > 10000) { // #3 validation
+                if (Float.parseFloat(roomFeeBox.getText()) > 10000) { // #3 validation
                     // Instantiate the Room model object
                     Room theRoom = new Room();
 
                     // set the rooms in model
                     theRoom.setRoomNo(roomNoBox.getText());
-                    theRoom.setRoomType(roomTypeBox.getText());
+                    theRoom.setRoomStatus(roomStatus.getSelectedItem().toString());
                     theRoom.setFee(roomFeeBox.getText());
 
                     // Instantiate the User DAO object
@@ -258,6 +258,6 @@ public class RegisterRoom extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextField roomFeeBox;
     private javax.swing.JTextField roomNoBox;
-    private javax.swing.JTextField roomTypeBox;
+    private javax.swing.JComboBox<String> roomStatus;
     // End of variables declaration//GEN-END:variables
 }

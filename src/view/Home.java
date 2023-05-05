@@ -36,6 +36,20 @@ public class Home extends javax.swing.JFrame {
         initComponents();
         addColumnsOnTable();
         retrieveDataFromDbToTable();
+        RoomDao roomDao = new RoomDao();
+        Room theRoom = new Room();
+        ResultSet result = roomDao.getAllRooms(theRoom);
+        
+        try {
+            javax.swing.DefaultComboBoxModel roomTypeElement = new javax.swing.DefaultComboBoxModel<>(new String[] {});
+            
+            while(result.next()) {
+                roomTypeElement.addElement(result.getString("room_no"));
+            }
+            roomTypeSelector.setModel(roomTypeElement);
+        } catch (SQLException ex) {
+            Logger.getLogger(RegisterClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private void addColumnsOnTable() {
@@ -43,7 +57,6 @@ public class Home extends javax.swing.JFrame {
         tableModel.addColumn("F Name");
         tableModel.addColumn("L Name");
         tableModel.addColumn("Room nr");
-        tableModel.addColumn("Type");
         tableModel.addColumn("Fee");
         tableModel.addColumn("Enter date");
         tableModel.addColumn("Exit date");
@@ -84,11 +97,10 @@ public class Home extends javax.swing.JFrame {
                     result.getString(2),
                     result.getString(3),
                     result.getString(4),
-                    result.getString(5),
-                    result.getString(8),
-                    result.getString(6),
                     result.getString(7),
-                    Math.round(Float.parseFloat(result.getString(9)))
+                    result.getString(5),
+                    result.getString(6),
+                    Math.round(Float.parseFloat(result.getString(8)))
                 });
             }
         } catch (Exception ex) {
@@ -121,12 +133,12 @@ public class Home extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         clientIdBox = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        roomTypeSelector = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         entranceDateBox = new com.toedter.calendar.JDateChooser();
         exitDateBox = new com.toedter.calendar.JDateChooser();
         billGeneratorBtn = new javax.swing.JButton();
+        roomTypeSelector = new javax.swing.JComboBox<>();
         gotoMenuLink = new javax.swing.JLabel();
         jMenuBar6 = new javax.swing.JMenuBar();
         openRoomMgtWindowLink = new javax.swing.JMenu();
@@ -212,10 +224,7 @@ public class Home extends javax.swing.JFrame {
 
         jLabel9.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 102, 102));
-        jLabel9.setText("Room type");
-
-        roomTypeSelector.setForeground(new java.awt.Color(0, 102, 102));
-        roomTypeSelector.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select room type", "Regular", "Regular (2 beds)", "VIP", "VIP (2 beds)", "Presidential suit" }));
+        jLabel9.setText("Room no");
 
         jLabel5.setFont(new java.awt.Font("Lucida Grande", 0, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(0, 102, 102));
@@ -250,7 +259,7 @@ public class Home extends javax.swing.JFrame {
                             .addComponent(fnameBox)
                             .addComponent(jLabel5)
                             .addComponent(entranceDateBox, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE))
-                        .addGap(18, 30, Short.MAX_VALUE)
+                        .addGap(30, 30, 30)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel7)
                             .addComponent(lnameBox)
@@ -273,9 +282,10 @@ public class Home extends javax.swing.JFrame {
                                     .addComponent(clientIdBox, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(30, 30, 30)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(roomTypeSelector, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel9))
-                                .addGap(21, 21, 21))))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel9)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 221, Short.MAX_VALUE))
+                                    .addComponent(roomTypeSelector, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                     .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel1)
@@ -305,15 +315,17 @@ public class Home extends javax.swing.JFrame {
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(fnameBox, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel4)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(clientIdBox, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jLabel9)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(roomTypeSelector, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel9)
+                                        .addGap(12, 12, 12)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(clientIdBox, javax.swing.GroupLayout.DEFAULT_SIZE, 39, Short.MAX_VALUE)
+                                    .addComponent(roomTypeSelector))))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(13, 13, 13)
@@ -440,7 +452,7 @@ public class Home extends javax.swing.JFrame {
         fnameBox.setText(tableModel.getValueAt(hr, 1).toString());
         lnameBox.setText(tableModel.getValueAt(hr, 2).toString());
         clientIdBox.setText(tableModel.getValueAt(hr, 0).toString());
-        roomTypeSelector.setSelectedItem(tableModel.getValueAt(hr, 4).toString());
+        roomTypeSelector.setSelectedItem(tableModel.getValueAt(hr, 3).toString());
         
         // ---------- format date ----------
         SimpleDateFormat df = new SimpleDateFormat("dd MM yyyy");
@@ -448,8 +460,8 @@ public class Home extends javax.swing.JFrame {
         java.util.Date exitDate;
         
         try {
-            entranceDate = df.parse(tableModel.getValueAt(hr, 6).toString());
-            exitDate = df.parse(tableModel.getValueAt(hr, 7).toString());
+            entranceDate = df.parse(tableModel.getValueAt(hr, 5).toString());
+            exitDate = df.parse(tableModel.getValueAt(hr, 6).toString());
             
             entranceDateBox.setDate(entranceDate);
             exitDateBox.setDate(exitDate);
@@ -466,7 +478,6 @@ public class Home extends javax.swing.JFrame {
         
         if (fnameBox.getText().isEmpty() || lnameBox.getText().isEmpty()
                 || clientIdBox.getText().isEmpty()
-                || (int) roomTypeSelector.getSelectedIndex() == 0
                 || (df.format(entranceDateBox.getDate()).equals(""))
                 || (df.format(exitDateBox.getDate()).equals(""))
                 ) {
@@ -478,23 +489,9 @@ public class Home extends javax.swing.JFrame {
             theClient.setFirstName(fnameBox.getText());
             theClient.setLastName(lnameBox.getText());
             theClient.setClientId(clientIdBox.getText());
-
-            // get room number of selected room type
-            RoomDao roomDao = new RoomDao();
-            Room theRoom = new Room();
-            ResultSet result = roomDao.getAllRooms(theRoom);
             
-            try {
-                String room_no;
-                while (result.next()) {
-                    if ((result.getString(2)).equals(roomTypeSelector.getSelectedItem())) {
-                        room_no = result.getString(1);
-                        theClient.setRoomNo(room_no);
-                    }
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(RegisterClient.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            String SelectedRoom = roomTypeSelector.getSelectedItem().toString();
+            theClient.setRoomNo(SelectedRoom);
             // --------------
 
             String entranceDate = df.format(entranceDateBox.getDate());
@@ -575,11 +572,10 @@ public class Home extends javax.swing.JFrame {
                     result.getString(2),
                     result.getString(3),
                     result.getString(4),
-                    result.getString(5),
-                    result.getString(8),
-                    result.getString(6),
                     result.getString(7),
-                    Math.round(Float.parseFloat(result.getString(9)))
+                    result.getString(5),
+                    result.getString(6),
+                    Math.round(Float.parseFloat(result.getString(8)))
                 });
             }
         } catch (Exception ex) {
@@ -610,11 +606,10 @@ public class Home extends javax.swing.JFrame {
                         result.getString(2),
                         result.getString(3),
                         result.getString(4),
-                        result.getString(5),
-                        result.getString(8),
-                        result.getString(6),
                         result.getString(7),
-                        Math.round(Float.parseFloat(result.getString(9)))
+                        result.getString(5),
+                        result.getString(6),
+                        Math.round(Float.parseFloat(result.getString(8)))
                     });
                 }
             } catch (Exception ex) {
@@ -665,7 +660,6 @@ public class Home extends javax.swing.JFrame {
             String fname = tableModel.getValueAt(hr, 1).toString();
             String lname = tableModel.getValueAt(hr, 2).toString();
             String roomNr = tableModel.getValueAt(hr, 3).toString();
-            String roomtype = tableModel.getValueAt(hr, 4).toString();
             String fee = tableModel.getValueAt(hr, 5).toString();
             String days = tableModel.getValueAt(hr, 8).toString();
             
@@ -674,8 +668,7 @@ public class Home extends javax.swing.JFrame {
                 exitDate = df.parse(tableModel.getValueAt(hr, 7).toString());
                 
                 String bill = "================================= HAPPY STAY HOTEL =================================\n\n" +
-                        fname +" "+ lname + "\n\n" +"Room Nr: "+ roomNr +
-                        "\t\t\t\t\t\t\t\t\t" + "Room type: " + roomtype + "\n\n" +
+                        fname +" "+ lname + "\n\n" +"Room Nr: "+ roomNr + "\n\n" +
                         "Entrance: " + entranceDate + "\t\t\t" + "Exit: " + exitDate +
                         "\n\n" + "Fee: " + (Float.parseFloat(fee)*Integer.parseInt(days)) + " Rwf" +
                         "\n\n---------------------------------- Welcome again! ----------------------------------";

@@ -12,16 +12,17 @@ package model;
 public class Room {
     // private variables
     private String roomNo;
-    private String roomType;
+    private String roomStatus;
     private String fee;
     
     public Room() {}
 
-    public Room(String roomNo, String roomType, String fee) {
+    public Room(String roomNo, String roomStatus, String fee) {
         this.roomNo = roomNo;
-        this.roomType = roomType;
+        this.roomStatus = roomStatus;
         this.fee = fee;
     }
+    
 
     public String getRoomNo() {
         return roomNo;
@@ -31,12 +32,12 @@ public class Room {
         this.roomNo = roomNo;
     }
 
-    public String getRoomType() {
-        return roomType;
+    public String getRoomStatus() {
+        return roomStatus;
     }
 
-    public void setRoomType(String roomType) {
-        this.roomType = roomType;
+    public void setRoomStatus(String roomStatus) {
+        this.roomStatus = roomStatus;
     }
 
     public String getFee() {

@@ -24,10 +24,10 @@ public class RoomDao {
             Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // Prepared statement
             PreparedStatement pst =
-                    conn.prepareStatement("INSERT INTO room VALUES(?,?,?)");
+                    conn.prepareStatement("INSERT INTO room (room_no, fee, status) VALUES(?,?,?)");
             pst.setString(1, roomObj.getRoomNo());
-            pst.setString(2, roomObj.getRoomType());
-            pst.setString(3, roomObj.getFee());
+            pst.setString(2, roomObj.getFee());
+            pst.setString(3, roomObj.getRoomStatus());
             // execute query
             int rowsAffected = pst.executeUpdate();
             // Close connection
@@ -47,7 +47,7 @@ public class RoomDao {
             Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // Prepared statement
             PreparedStatement pst =
-                    conn.prepareStatement("SELECT room_no, room_type, fee FROM room");
+                    conn.prepareStatement("SELECT room_no, fee, status FROM room");
             // execute query
             ResultSet result = pst.executeQuery();
             return result;
@@ -67,7 +67,7 @@ public class RoomDao {
             // Prepared statement
             PreparedStatement pst =
                     conn.prepareStatement(
-            "SELECT room_no, room_type, fee FROM room WHERE room_no LIKE '%"+searchKey+"%' OR room_type LIKE '%"+searchKey+"%' OR fee LIKE '%"+searchKey+"%' ORDER BY fee ASC");
+            "SELECT room_no, fee. status FROM room WHERE room_no LIKE '%"+searchKey+"%' OR room_type LIKE '%"+searchKey+"%' OR fee LIKE '%"+searchKey+"%' ORDER BY fee ASC");
             // execute query
             ResultSet result = pst.executeQuery();
             return result;
@@ -86,10 +86,32 @@ public class RoomDao {
             Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // prepared statement
             PreparedStatement pst =
-                    conn.prepareStatement("UPDATE room SET room_type=?, fee=? WHERE room_no=?");
-            pst.setString(1, roomObj.getRoomType());
-            pst.setString(2, roomObj.getFee());
+                    conn.prepareStatement("UPDATE room SET fee=?, status=? WHERE room_no=?");
+            pst.setString(1, roomObj.getFee());
+            pst.setString(2, roomObj.getRoomStatus());
             pst.setString(3, roomObj.getRoomNo());
+            // execute query
+            int rowsAffected = pst.executeUpdate();
+            // close connection
+            conn.close();
+            return rowsAffected;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+    
+    public Integer updateRoomStatus(Room roomObj) {
+        try {
+            // Register driver
+            // -
+            // Create connection
+            Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
+            // prepared statement
+            PreparedStatement pst =
+                    conn.prepareStatement("UPDATE room SET status=? WHERE room_no=?");
+            pst.setString(1, roomObj.getRoomStatus());
+            pst.setString(2, roomObj.getRoomNo());
             // execute query
             int rowsAffected = pst.executeUpdate();
             // close connection
@@ -131,7 +153,7 @@ public class RoomDao {
             Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // Prepared statement
             PreparedStatement pst =
-                    conn.prepareStatement("SELECT room_no, room_type FROM room");
+                    conn.prepareStatement("SELECT room_no, fee, status FROM room");
             // execute query
             ResultSet result = pst.executeQuery();
             return result;
