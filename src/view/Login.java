@@ -25,6 +25,7 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+	createDBandTables();
     }
     
     // check if theres database and tables
