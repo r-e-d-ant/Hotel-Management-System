@@ -16,12 +16,85 @@ import model.User;
  * @author hg_ofthecity
  */
 public class Login extends javax.swing.JFrame {
+    public String db_url = "jdbc:mysql://localhost:3306/";
+    public String db_username = "root"; // db username
+    public String db_password = "mugishathi"; // db password
     
     /**
      * Creates new form Login
      */
     public Login() {
         initComponents();
+    }
+    
+    // check if theres database and tables
+    // if not create them
+    // also add admin by default
+    
+    public void createDBandTables() {
+    
+        Connection conn = null;
+        Statement stmt = null;
+        
+        // Open a connection
+        
+        try {
+            System.out.println("Connecting to database...");
+            conn = DriverManager.getConnection(db_url, db_username, db_password);
+            
+            // Create database if it doesn't exist
+            System.out.println("Creating database...");
+            stmt = conn.createStatement();
+            String sql = "CREATE DATABASE IF NOT EXISTS Hotel_management_system_db";
+            stmt.executeUpdate(sql);
+            System.out.println("Database created successfully...");
+            
+            // Use database
+            System.out.println("Using database...");
+            conn.setCatalog("Hotel_management_system_db");
+            
+            // Create table if it doesn't exist
+            System.out.println("Creating tables...");
+            String sqlUser = "CREATE TABLE IF NOT EXISTS User (\n" +
+                    "  `user_id` varchar(20) NOT NULL,\n" +
+                    "  `fullname` varchar(45) NOT NULL,\n" +
+                    "  `email` varchar(45) NOT NULL,\n" +
+                    "  `password` varchar(60) NOT NULL,\n" +
+                    "  `userLevel` int NOT NULL DEFAULT '0',\n" +
+                    "  PRIMARY KEY (`user_id`),\n" +
+                    "  UNIQUE KEY `id_UNIQUE` (`user_id`)\n" +
+                    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
+            stmt.executeUpdate(sqlUser);
+            String sqlRoom = "CREATE TABLE IF NOT EXISTS Room (\n" +
+                    "  `room_no` varchar(5) NOT NULL,\n" +
+                    "  `fee` float NOT NULL,\n" +
+                    "  `status` varchar(45) DEFAULT 'available',\n" +
+                    "  PRIMARY KEY (`room_no`),\n" +
+                    "  UNIQUE KEY `id_UNIQUE` (`room_no`)\n" +
+                    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
+            stmt.executeUpdate(sqlRoom);
+            String sqlClient = "CREATE TABLE IF NOT EXISTS Client (\n" +
+                    "  `client_id` varchar(10) NOT NULL,\n" +
+                    "  `first_name` varchar(20) NOT NULL,\n" +
+                    "  `last_name` varchar(20) NOT NULL,\n" +
+                    "  `client_room_no` varchar(5) NOT NULL,\n" +
+                    "  `entrance_date` varchar(10) NOT NULL,\n" +
+                    "  `exit_date` varchar(10) DEFAULT NULL,\n" +
+                    "  PRIMARY KEY (`client_id`),\n" +
+                    "  UNIQUE KEY `id_UNIQUE` (`client_id`),\n" +
+                    "  KEY `room_no_idx` (`client_room_no`)\n" +
+                    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
+            
+            stmt.executeUpdate(sqlClient);
+            System.out.println("Tables created successfully...");
+            // Close the connection
+            stmt.close();
+            conn.close();
+            System.out.println("Database connection closed...");
+            
+        } catch(Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     /**
