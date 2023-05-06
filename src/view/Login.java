@@ -175,7 +175,7 @@ public class Login extends javax.swing.JFrame {
             
             stmt.executeUpdate(sqlClient);
             System.out.println("Tables created successfully...");
-            String sqlCreateAdmin = "INSERT INTO user (user_id, fullname, email, password) VALUES ('1', 'The Admin', 'admin@me.com', 'admin123')";
+            String sqlCreateAdmin = "INSERT INTO user (user_id, fullname, email, password, userLevel) VALUES ('1', 'The Admin', 'admin@me.com', 'admin123', 1)";
             stmt.executeUpdate(sqlCreateAdmin);
             // Close the connection
             stmt.close();
