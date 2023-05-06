@@ -16,23 +16,92 @@ import model.User;
  * @author hg_ofthecity
  */
 public class Login extends javax.swing.JFrame {
+    public String db_name = "Hotel_management_system_db";
+    public String db_url_test = "jdbc:mysql://localhost:3306/"+db_name+"";
     public String db_url = "jdbc:mysql://localhost:3306/";
-    public String db_username = "root"; // db username
-    public String db_password = "mugishathi"; // db password
+    public String db_username = "root"; // insert your db username
+    public String db_password = "mugishathi"; // insert your db password
     
     /**
      * Creates new form Login
      */
     public Login() {
         initComponents();
-	createDBandTables();
+        int isThere = checkDB();
+        if (isThere >= 1) {
+            db_url = db_url_test;
+            Integer isThereTables = tableExistsChecker();
+            
+            if (isThereTables == 3) {
+                System.out.println("Alright lets start the hack");
+            } else {
+                createTables();
+            }
+        } else {
+            Integer rows = createDB();
+            if (rows != null) {
+                db_url = db_url_test;
+                createTables();
+            }
+        }
     }
     
     // check if theres database and tables
     // if not create them
     // also add admin by default
     
-    public void createDBandTables() {
+    public int checkDB() {
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            conn = DriverManager.getConnection(db_url_test, db_username, db_password);
+            stmt = conn.createStatement();
+            stmt.executeQuery("SELECT 1 FROM dual"); // MySQL specific query to test if the connection is valid
+            return 1;
+        } catch (SQLException e) {
+            System.out.println("Database does not exist or connection could not be established.");
+            return 0;
+        } finally {
+            try {
+                if (stmt != null) stmt.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                System.out.println("Failed to close database resources: " + e.getMessage());
+            }
+        }
+    }
+    
+    // for checking if all tables exists
+    public Integer tableExistsChecker() {
+        Connection conn = null;
+        ResultSet rs = null;
+        int three = 0;
+        try {
+            conn = DriverManager.getConnection(db_url, db_username, db_password);
+            DatabaseMetaData dbmd = conn.getMetaData();
+            String[] tables = {"user", "room", "client"}; // Change this to the names of the tables you want to check
+            for (String table : tables) {
+                rs = dbmd.getTables(null, null, table, null);
+                if (rs.next()) {
+                    three = three + 1;
+                } else {
+                    System.out.println(table + " does not exist.");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Failed to check if tables exist: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (conn != null) conn.close();
+            } catch (SQLException e) {
+                System.out.println("Failed to close database resources: " + e.getMessage());
+            }
+            return three;
+        }
+    }
+    
+    public Integer createDB() {
     
         Connection conn = null;
         Statement stmt = null;
@@ -47,16 +116,34 @@ public class Login extends javax.swing.JFrame {
             System.out.println("Creating database...");
             stmt = conn.createStatement();
             String sql = "CREATE DATABASE IF NOT EXISTS Hotel_management_system_db";
-            stmt.executeUpdate(sql);
+            int rowsAffected = stmt.executeUpdate(sql);
             System.out.println("Database created successfully...");
+            // Close the connection
+            stmt.close();
+            conn.close();
+            System.out.println("Database connection closed...");
+            return rowsAffected;
             
-            // Use database
-            System.out.println("Using database...");
-            conn.setCatalog("Hotel_management_system_db");
+        } catch(Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+    
+    public void createTables() {
+        Connection conn = null;
+        Statement stmt = null;
+        
+        try {
+            System.out.println("Connecting to database...");
+            conn = DriverManager.getConnection(db_url, db_username, db_password);
+            
+            stmt = conn.createStatement();
             
             // Create table if it doesn't exist
             System.out.println("Creating tables...");
-            String sqlUser = "CREATE TABLE IF NOT EXISTS User (\n" +
+            
+            String sqlUser = "CREATE TABLE IF NOT EXISTS user (\n" +
                     "  `user_id` varchar(20) NOT NULL,\n" +
                     "  `fullname` varchar(45) NOT NULL,\n" +
                     "  `email` varchar(45) NOT NULL,\n" +
@@ -66,7 +153,7 @@ public class Login extends javax.swing.JFrame {
                     "  UNIQUE KEY `id_UNIQUE` (`user_id`)\n" +
                     ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
             stmt.executeUpdate(sqlUser);
-            String sqlRoom = "CREATE TABLE IF NOT EXISTS Room (\n" +
+            String sqlRoom = "CREATE TABLE IF NOT EXISTS room (\n" +
                     "  `room_no` varchar(5) NOT NULL,\n" +
                     "  `fee` float NOT NULL,\n" +
                     "  `status` varchar(45) DEFAULT 'available',\n" +
@@ -74,7 +161,7 @@ public class Login extends javax.swing.JFrame {
                     "  UNIQUE KEY `id_UNIQUE` (`room_no`)\n" +
                     ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;";
             stmt.executeUpdate(sqlRoom);
-            String sqlClient = "CREATE TABLE IF NOT EXISTS Client (\n" +
+            String sqlClient = "CREATE TABLE IF NOT EXISTS client (\n" +
                     "  `client_id` varchar(10) NOT NULL,\n" +
                     "  `first_name` varchar(20) NOT NULL,\n" +
                     "  `last_name` varchar(20) NOT NULL,\n" +
@@ -88,6 +175,8 @@ public class Login extends javax.swing.JFrame {
             
             stmt.executeUpdate(sqlClient);
             System.out.println("Tables created successfully...");
+            String sqlCreateAdmin = "INSERT INTO user (user_id, fullname, email, password) VALUES ('1', 'The Admin', 'admin@me.com', 'admin123')";
+            stmt.executeUpdate(sqlCreateAdmin);
             // Close the connection
             stmt.close();
             conn.close();
