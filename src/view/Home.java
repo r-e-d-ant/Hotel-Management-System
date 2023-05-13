@@ -381,7 +381,11 @@ public class Home extends javax.swing.JFrame {
         adminWindowLink.setText("Admin");
         adminWindowLink.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                adminWindowLinkMouseClicked(evt);
+                try {
+                    adminWindowLinkMouseClicked(evt);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         jMenuBar6.add(adminWindowLink);
@@ -390,7 +394,11 @@ public class Home extends javax.swing.JFrame {
         openLogoutWindowLink.setText("Logout");
         openLogoutWindowLink.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                openLogoutWindowLinkMouseClicked(evt);
+                try {
+                    openLogoutWindowLinkMouseClicked(evt);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         jMenuBar6.add(openLogoutWindowLink);
@@ -436,7 +444,7 @@ public class Home extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_openAddRoomWindowLinkMouseClicked
 
-    private void openLogoutWindowLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_openLogoutWindowLinkMouseClicked
+    private void openLogoutWindowLinkMouseClicked(java.awt.event.MouseEvent evt) throws SQLException {//GEN-FIRST:event_openLogoutWindowLinkMouseClicked
         // TODO add your handling code here:
         Login loginForm = new Login();
         loginForm.setVisible(true);
@@ -624,7 +632,7 @@ public class Home extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_searchInputBoxKeyReleased
 
-    private void adminWindowLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_adminWindowLinkMouseClicked
+    private void adminWindowLinkMouseClicked(java.awt.event.MouseEvent evt) throws SQLException {//GEN-FIRST:event_adminWindowLinkMouseClicked
         // TODO add your handling code here:
         if ((getUserLevel()).equals("1")) {
             Admin adminForm = new Admin();
