@@ -12,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.User;
@@ -302,7 +303,11 @@ public class UserMgt extends javax.swing.JFrame {
         adminWindowLink.setText("Admin");
         adminWindowLink.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                adminWindowLinkMouseClicked(evt);
+                try {
+                    adminWindowLinkMouseClicked(evt);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         jMenuBar1.add(adminWindowLink);
@@ -311,7 +316,11 @@ public class UserMgt extends javax.swing.JFrame {
         openLogoutWindowLink.setText("Logout");
         openLogoutWindowLink.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                openLogoutWindowLinkMouseClicked(evt);
+                try {
+                    openLogoutWindowLinkMouseClicked(evt);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
         jMenuBar1.add(openLogoutWindowLink);
@@ -490,7 +499,7 @@ public class UserMgt extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_openAddClientWindowLinkMouseClicked
 
-    private void openLogoutWindowLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_openLogoutWindowLinkMouseClicked
+    private void openLogoutWindowLinkMouseClicked(java.awt.event.MouseEvent evt) throws SQLException {//GEN-FIRST:event_openLogoutWindowLinkMouseClicked
         // TODO add your handling code here:
         Login loginForm = new Login();
         loginForm.setVisible(true);
@@ -511,7 +520,7 @@ public class UserMgt extends javax.swing.JFrame {
         }
     }
     
-    private void adminWindowLinkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_adminWindowLinkMouseClicked
+    private void adminWindowLinkMouseClicked(java.awt.event.MouseEvent evt) throws SQLException {//GEN-FIRST:event_adminWindowLinkMouseClicked
         // TODO add your handling code here:
         if ((getUserLevel()).equals("1")) {
             Admin adminForm = new Admin();

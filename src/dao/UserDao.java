@@ -2,16 +2,14 @@
 package dao;
 import java.sql.*;
 import model.User;
+import view.Login;
 
 /**
  *
  * @author hg_ofthecity
  */
 public class UserDao {
-    // global variables
-    private String db_url = "jdbc:mysql://localhost:3306/Hotel_management_system_db";
-    private String db_username = "root";
-    private String db_password = "mugishathi";
+    private Connection conn = Login.conn;
     
     public UserDao() {}
     
@@ -20,8 +18,6 @@ public class UserDao {
         try {
             // register driver
             // - not necessary
-            // create connection
-            Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // prepared statement
             PreparedStatement pst =
                     conn.prepareStatement("INSERT INTO user (user_id, fullname, email, password) VALUES(?,?,?,?)");
@@ -33,8 +29,6 @@ public class UserDao {
             pst.setString(4, userObj.getUserPassword());
             // execute query
             int rowsAffected = pst.executeUpdate();
-            // close connection
-            conn.close();
             return rowsAffected;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -47,8 +41,6 @@ public class UserDao {
         try {
             // register driver
             // - not necessary
-            // create connection
-            Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // prepared statement
             PreparedStatement pst =
                     conn.prepareStatement("UPDATE user SET fullname=?, email=?, password=? WHERE user_id=?");
@@ -60,8 +52,6 @@ public class UserDao {
             pst.setString(4, userObj.getUserId());
             // execute query
             int rowsAffected = pst.executeUpdate();
-            // close connection
-            conn.close();
             return rowsAffected;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -74,15 +64,11 @@ public class UserDao {
         try {
             // register driver
             // -
-            // create connection
-            Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // prepared statement
             PreparedStatement pst =
                     conn.prepareStatement("SELECT user_id, fullname, email, password, userLevel FROM user");
             // execute query
             ResultSet result = pst.executeQuery();
-            // close connection
-            // conn.close() -- the connection close itself when using prepared statement
             return result;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -95,16 +81,12 @@ public class UserDao {
         try {
             // register driver
             // -
-            // create connection
-            Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // prepared statement
             PreparedStatement pst =
                     conn.prepareStatement(
             "SELECT user_id, fullname, email, password, userLevel FROM user WHERE user_id LIKE '%"+searchKey+"%' OR fullname LIKE '%"+searchKey+"%'");
             // execute query
             ResultSet result = pst.executeQuery();
-            // close connection
-            // conn.close() -- the connection close itself when using prepared statement
             return result;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -117,16 +99,12 @@ public class UserDao {
         try {
             // register driver
             // -
-            // create connection
-            Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // prepared statement
             PreparedStatement pst =
                     conn.prepareStatement("DELETE FROM user WHERE user_id=?");
             pst.setString(1, userObj.getUserId());
             // execute query
             int rowsAffected = pst.executeUpdate();
-            // close connection
-            conn.close();
             return rowsAffected;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -139,16 +117,12 @@ public class UserDao {
         try {
             // register driver
             // -
-            // create connection
-            Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // prepared statement
             PreparedStatement pst =
                     conn.prepareStatement("SELECT user_id, email, password, userLevel FROM user WHERE email=?");
             pst.setString(1, userObj.getUserEmail());
             // execute query
             ResultSet result = pst.executeQuery();
-            // close connection
-            // conn.close() -- the connection close itself when using prepared statement
             return result;
         } catch (Exception ex) {
             ex.printStackTrace();
