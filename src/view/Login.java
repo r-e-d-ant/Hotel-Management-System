@@ -5,10 +5,12 @@
  */
 package view;
 
+import com.formdev.flatlaf.FlatLightLaf;
 import dao.UserDao;
 import java.io.*;
 import java.sql.*;
-import javax.swing.JOptionPane;
+import javax.swing.*;
+
 import model.User;
 
 /**
@@ -21,7 +23,11 @@ public class Login extends javax.swing.JFrame {
     public String db_url = "jdbc:mysql://localhost:3306/";
     public String db_username = "root"; // insert your db username
     public String db_password = "mugishathi"; // insert your db password
-    
+
+    //We shall create the connection to the database only once, at the start
+    //of our application, and close it once our application is closed
+    public static Connection conn;
+
     /**
      * Creates new form Login
      */
@@ -31,7 +37,7 @@ public class Login extends javax.swing.JFrame {
         if (isThere >= 1) {
             db_url = db_url_test;
             Integer isThereTables = tableExistsChecker();
-            
+
             if (isThereTables == 3) {
                 System.out.println("Alright lets start the hack");
             } else {
@@ -51,7 +57,6 @@ public class Login extends javax.swing.JFrame {
     // also add admin by default
     
     public int checkDB() {
-        Connection conn = null;
         Statement stmt = null;
         try {
             conn = DriverManager.getConnection(db_url_test, db_username, db_password);
@@ -64,7 +69,6 @@ public class Login extends javax.swing.JFrame {
         } finally {
             try {
                 if (stmt != null) stmt.close();
-                if (conn != null) conn.close();
             } catch (SQLException e) {
                 System.out.println("Failed to close database resources: " + e.getMessage());
             }
@@ -73,7 +77,6 @@ public class Login extends javax.swing.JFrame {
     
     // for checking if all tables exists
     public Integer tableExistsChecker() {
-        Connection conn = null;
         ResultSet rs = null;
         int three = 0;
         try {
@@ -93,7 +96,6 @@ public class Login extends javax.swing.JFrame {
         } finally {
             try {
                 if (rs != null) rs.close();
-                if (conn != null) conn.close();
             } catch (SQLException e) {
                 System.out.println("Failed to close database resources: " + e.getMessage());
             }
@@ -102,8 +104,7 @@ public class Login extends javax.swing.JFrame {
     }
     
     public Integer createDB() {
-    
-        Connection conn = null;
+
         Statement stmt = null;
         
         // Open a connection
@@ -120,7 +121,6 @@ public class Login extends javax.swing.JFrame {
             System.out.println("Database created successfully...");
             // Close the connection
             stmt.close();
-            conn.close();
             System.out.println("Database connection closed...");
             return rowsAffected;
             
@@ -131,7 +131,6 @@ public class Login extends javax.swing.JFrame {
     }
     
     public void createTables() {
-        Connection conn = null;
         Statement stmt = null;
         
         try {
@@ -179,7 +178,6 @@ public class Login extends javax.swing.JFrame {
             stmt.executeUpdate(sqlCreateAdmin);
             // Close the connection
             stmt.close();
-            conn.close();
             System.out.println("Database connection closed...");
             
         } catch(Exception ex) {
@@ -347,27 +345,15 @@ public class Login extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+
+        FlatLightLaf.setup();
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            UIManager.setLookAndFeel( new FlatLightLaf() );
+        } catch( Exception ex ) {
+            System.err.println( "Failed to initialize LaF" );
         }
+
+
         //</editor-fold>
 
         /* Create and display the form */

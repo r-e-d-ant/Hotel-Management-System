@@ -2,6 +2,7 @@
 package dao;
 import java.sql.*;
 import model.Room;
+import view.Login;
 
 /**
  *
@@ -9,9 +10,7 @@ import model.Room;
  */
 public class RoomDao {
     // global variables
-    private String db_url = "jdbc:mysql://localhost:3306/Hotel_management_system_db";
-    private String db_username = "root";
-    private String db_password = "mugishathi";
+    private Connection conn = Login.conn;
     
     public RoomDao() {}
     
@@ -20,8 +19,6 @@ public class RoomDao {
         try {
             // Register driver
             // --
-            // Create connection
-            Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // Prepared statement
             PreparedStatement pst =
                     conn.prepareStatement("INSERT INTO room (room_no, fee, status) VALUES(?,?,?)");
@@ -30,8 +27,6 @@ public class RoomDao {
             pst.setString(3, roomObj.getRoomStatus());
             // execute query
             int rowsAffected = pst.executeUpdate();
-            // Close connection
-            conn.close();
             return rowsAffected;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -43,15 +38,12 @@ public class RoomDao {
         try {
             // Register driver
             // --
-            // Create connection
-            Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // Prepared statement
             PreparedStatement pst =
                     conn.prepareStatement("SELECT room_no, fee, status FROM room ORDER BY room_no ASC");
             // execute query
             ResultSet result = pst.executeQuery();
             return result;
-//            conn.close();
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
@@ -62,8 +54,6 @@ public class RoomDao {
         try {
             // Register driver
             // --
-            // Create connection
-            Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // Prepared statement
             PreparedStatement pst =
                     conn.prepareStatement(
@@ -71,7 +61,6 @@ public class RoomDao {
             // execute query
             ResultSet result = pst.executeQuery();
             return result;
-//            conn.close();
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;
@@ -82,8 +71,6 @@ public class RoomDao {
         try {
             // Register driver
             // -
-            // Create connection
-            Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // prepared statement
             PreparedStatement pst =
                     conn.prepareStatement("UPDATE room SET fee=?, status=? WHERE room_no=?");
@@ -92,8 +79,6 @@ public class RoomDao {
             pst.setString(3, roomObj.getRoomNo());
             // execute query
             int rowsAffected = pst.executeUpdate();
-            // close connection
-            conn.close();
             return rowsAffected;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -105,8 +90,6 @@ public class RoomDao {
         try {
             // Register driver
             // -
-            // Create connection
-            Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // prepared statement
             PreparedStatement pst =
                     conn.prepareStatement("UPDATE room SET status=? WHERE room_no=?");
@@ -115,8 +98,6 @@ public class RoomDao {
             pst.setString(2, roomObj.getRoomNo());
             // execute query
             int rowsAffected = pst.executeUpdate();
-            // close connection
-            conn.close();
             return rowsAffected;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -128,16 +109,12 @@ public class RoomDao {
         try {
             // Register driver
             // -
-            // Create connection
-            Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // prepared statement
             PreparedStatement pst =
                     conn.prepareStatement("DELETE FROM room WHERE room_no=?");
             pst.setString(1, roomObj.getRoomNo());
             // execute query
             int rowsAffected = pst.executeUpdate();
-            // close connection
-            conn.close();
             return rowsAffected;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -150,15 +127,12 @@ public class RoomDao {
         try {
             // Register driver
             // --
-            // Create connection
-            Connection conn = DriverManager.getConnection(db_url, db_username, db_password);
             // Prepared statement
             PreparedStatement pst =
                     conn.prepareStatement("SELECT room_no, fee, status FROM room");
             // execute query
             ResultSet result = pst.executeQuery();
             return result;
-            // conn.close(); -- the connection close itself when using prepared statement
         } catch (Exception ex) {
             ex.printStackTrace();
             return null;

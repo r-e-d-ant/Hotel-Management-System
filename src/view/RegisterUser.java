@@ -10,6 +10,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import model.User;
 
@@ -64,7 +65,11 @@ public class RegisterUser extends javax.swing.JFrame {
         saveUserBtn.setText("Save");
         saveUserBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                saveUserBtnActionPerformed(evt);
+                try {
+                    saveUserBtnActionPerformed(evt);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
             }
         });
 
@@ -156,7 +161,7 @@ public class RegisterUser extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     // saving the user button action
-    private void saveUserBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveUserBtnActionPerformed
+    private void saveUserBtnActionPerformed(java.awt.event.ActionEvent evt) throws SQLException {//GEN-FIRST:event_saveUserBtnActionPerformed
         // TODO add your handling code here:
         
         if (userIdBox.getText().isEmpty()
