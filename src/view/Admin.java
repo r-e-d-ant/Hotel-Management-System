@@ -5,6 +5,11 @@
  */
 package view;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.sql.SQLException;
+import static view.Login.conn;
+
 /**
  *
  * @author hg_ofthecity
@@ -16,6 +21,26 @@ public class Admin extends javax.swing.JFrame {
      */
     public Admin() {
         initComponents();
+        
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // Close the database connection
+                if (conn != null) {
+                    try {
+                        conn.close();
+                        System.out.println("Connection closed");
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                        // Handle connection closing error
+                    }
+                }
+                System.out.println("No connection was open");
+                // Dispose or exit the form
+                dispose();
+                // or System.exit(0);
+            }
+        });
     }
 
     /**
