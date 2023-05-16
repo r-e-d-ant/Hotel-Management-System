@@ -5,13 +5,17 @@
  */
 package view;
 import dao.RoomDao;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import model.Room;
+import static view.Login.conn;
 
 /**
  *
@@ -24,6 +28,26 @@ public class RegisterRoom extends javax.swing.JFrame {
      */
     public RegisterRoom() {
         initComponents();
+        
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // Close the database connection
+                if (conn != null) {
+                    try {
+                        conn.close();
+                        System.out.println("Connection closed");
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                        // Handle connection closing error
+                    }
+                }
+                System.out.println("No connection was open");
+                // Dispose or exit the form
+                dispose();
+                // or System.exit(0);
+            }
+        });
     }
 
     /**

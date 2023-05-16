@@ -7,6 +7,7 @@ package view;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import dao.UserDao;
+import java.awt.event.*;
 import java.io.*;
 import java.sql.*;
 import javax.swing.*;
@@ -50,6 +51,26 @@ public class Login extends javax.swing.JFrame {
                 createTables();
             }
         }
+        
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // Close the database connection
+                if (conn != null) {
+                    try {
+                        conn.close();
+                        System.out.println("Connection closed");
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                        // Handle connection closing error
+                    }
+                }
+                System.out.println("No connection was open");
+                // Dispose or exit the form
+                dispose();
+                // or System.exit(0);
+            }
+        });
     }
     
     // check if theres database and tables
@@ -363,7 +384,7 @@ public class Login extends javax.swing.JFrame {
             }
         });
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField emailBox;
     private javax.swing.JLabel jLabel1;

@@ -6,6 +6,8 @@
 package view;
 
 import dao.UserDao;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.nio.file.Files;
@@ -16,6 +18,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import model.User;
+import static view.Login.conn;
 /**
  *
  * @author hg_ofthecity
@@ -32,6 +35,26 @@ public class UserMgt extends javax.swing.JFrame {
         initComponents();
         addColumnsOnTable();
         retrieveDataFromDbToTable();
+        
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                // Close the database connection
+                if (conn != null) {
+                    try {
+                        conn.close();
+                        System.out.println("Connection closed");
+                    } catch (SQLException ex) {
+                        ex.printStackTrace();
+                        // Handle connection closing error
+                    }
+                }
+                System.out.println("No connection was open");
+                // Dispose or exit the form
+                dispose();
+                // or System.exit(0);
+            }
+        });
     }
     
     private void addColumnsOnTable() {
